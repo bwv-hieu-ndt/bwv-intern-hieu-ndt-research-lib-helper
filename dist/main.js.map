@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/main.ts"],"sourcesContent":["\r\n\r\nconst boostrap = () => {\r\n\r\n console.log(\"Hello world\")\r\n}\r\n\r\nboostrap();"],"mappings":";;;AAEA,IAAM,WAAW,MAAM;AAEtB,UAAQ,IAAI,aAAa;AAC1B;AAEA,SAAS;","names":[]}
