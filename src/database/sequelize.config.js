@@ -4,8 +4,8 @@ const configs = require('../configs.ts');
 module.exports = {
   username: configs.DB_USERNAME,
   password: configs.DB_PASSWORD,
-  database: configs.DB_DATABASE,
+  database: configs.DB_NAME,
   host: configs.DB_HOST,
   dialect: 'mysql',
-  port: 3306
+  port: configs.DB_PORT
 };

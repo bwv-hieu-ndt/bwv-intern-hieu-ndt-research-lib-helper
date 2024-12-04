@@ -3,22 +3,8 @@ var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -44,28 +30,28 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/configs.ts
 var configs_exports = {};
 __export(configs_exports, {
-  DB_DATABASE: () => DB_DATABASE,
   DB_HOST: () => DB_HOST,
+  DB_NAME: () => DB_NAME,
   DB_PASSWORD: () => DB_PASSWORD,
-  DB_USERNAME: () => DB_USERNAME,
-  PORT: () => PORT
+  DB_PORT: () => DB_PORT,
+  DB_USERNAME: () => DB_USERNAME
 });
 module.exports = __toCommonJS(configs_exports);
 var import_dotenv = __toESM(require("dotenv"));
-import_dotenv.default.config({ path: `.env` });
+import_dotenv.default.config({ path: ".env" });
 var {
-  PORT,
+  DB_PORT,
   DB_USERNAME,
   DB_PASSWORD,
   DB_HOST,
-  DB_DATABASE
-} = __spreadValues({}, process.env);
+  DB_NAME
+} = { ...process.env };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  DB_DATABASE,
   DB_HOST,
+  DB_NAME,
   DB_PASSWORD,
-  DB_USERNAME,
-  PORT
+  DB_PORT,
+  DB_USERNAME
 });
 //# sourceMappingURL=configs.js.map

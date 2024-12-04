@@ -1,27 +1,19 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": "./src",
-    "allowUnreachableCode": false,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "Node16",
-    "noImplicitAny": true,
-    "resolveJsonModule": true,
-    "noImplicitReturns": false,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "sourceMap": true,
-    "strictNullChecks": true,
+    "target": "ESNext",
+    "module": "CommonJS",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "importsNotUsedAsValues": "remove",
     "strict": true,
-    "pretty": true,
-    "target": "es6",
-    "typeRoots": ["./src/typings", "../../node_modules/@types"],
-    "outDir": "build"
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true 
   },
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "build", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

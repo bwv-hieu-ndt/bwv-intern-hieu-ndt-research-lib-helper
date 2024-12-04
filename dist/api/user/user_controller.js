@@ -1,10 +1,12 @@
 "use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -13,20 +15,14 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/main.ts
-var import_express2 = __toESM(require("express"));
-
-// src/api/user/user_route.ts
-var import_express = __toESM(require("express"));
+// src/api/user/user_controller.ts
+var user_controller_exports = {};
+__export(user_controller_exports, {
+  default: () => user_controller_default
+});
+module.exports = __toCommonJS(user_controller_exports);
 
 // src/database/models/user.ts
 var import_sequelize2 = require("sequelize");
@@ -161,30 +157,4 @@ var UserController = class {
   }
 };
 var user_controller_default = UserController;
-
-// src/api/user/user_route.ts
-var UserRoute = class {
-  path = "/users";
-  router = import_express.default.Router();
-  userController = new user_controller_default();
-  constructor() {
-    this.initializeRoutes();
-  }
-  initializeRoutes() {
-    this.router.route(`${this.path}`).get(this.userController.getAllUser).post(this.userController.createUser);
-  }
-};
-var user_route_default = UserRoute;
-
-// src/main.ts
-var boostrap = async () => {
-  const app = (0, import_express2.default)();
-  const port = 8080;
-  const userRoute = new user_route_default();
-  app.use("/", userRoute.router);
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
-};
-boostrap();
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=user_controller.js.map

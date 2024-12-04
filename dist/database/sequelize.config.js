@@ -1,39 +1,10 @@
 "use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value2) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value: value2 }) : obj[key] = value2;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
 };
@@ -61,26 +32,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value2) => {
-      try {
-        step(generator.next(value2));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value2) => {
-      try {
-        step(generator.throw(value2));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 
 // node_modules/make-error/index.js
 var require_make_error = __commonJS({
@@ -1290,9 +1241,10 @@ var require_configuration = __commonJS({
       }
       const files = (_c = (_b = rawApiOptions.files) !== null && _b !== void 0 ? _b : tsNodeOptionsFromTsconfig.files) !== null && _c !== void 0 ? _c : index_1.DEFAULTS.files;
       const skipDefaultCompilerOptions = configFilePath != null;
-      const defaultCompilerOptionsForNodeVersion = skipDefaultCompilerOptions ? void 0 : __spreadProps(__spreadValues({}, (0, tsconfigs_1.getDefaultTsconfigJsonForNodeVersion)(ts).compilerOptions), {
+      const defaultCompilerOptionsForNodeVersion = skipDefaultCompilerOptions ? void 0 : {
+        ...(0, tsconfigs_1.getDefaultTsconfigJsonForNodeVersion)(ts).compilerOptions,
         types: ["node"]
-      });
+      };
       config.compilerOptions = Object.assign(
         {},
         // automatically-applied options from @tsconfig/bases
@@ -1342,7 +1294,7 @@ var require_configuration = __commonJS({
     function filterRecognizedTsConfigTsNodeOptions(jsonObject) {
       if (jsonObject == null)
         return { recognized: {}, unrecognized: {} };
-      const _a = jsonObject, { compiler, compilerHost, compilerOptions, emit, files, ignore, ignoreDiagnostics, logError, preferTsExts, pretty, require: require2, skipIgnore, transpileOnly, typeCheck, transpiler, scope, scopeDir, moduleTypes, experimentalReplAwait, swc, experimentalResolver, esm, experimentalSpecifierResolution, experimentalTsImportSpecifiers } = _a, unrecognized = __objRest(_a, ["compiler", "compilerHost", "compilerOptions", "emit", "files", "ignore", "ignoreDiagnostics", "logError", "preferTsExts", "pretty", "require", "skipIgnore", "transpileOnly", "typeCheck", "transpiler", "scope", "scopeDir", "moduleTypes", "experimentalReplAwait", "swc", "experimentalResolver", "esm", "experimentalSpecifierResolution", "experimentalTsImportSpecifiers"]);
+      const { compiler, compilerHost, compilerOptions, emit, files, ignore, ignoreDiagnostics, logError, preferTsExts, pretty, require: require2, skipIgnore, transpileOnly, typeCheck, transpiler, scope, scopeDir, moduleTypes, experimentalReplAwait, swc, experimentalResolver, esm, experimentalSpecifierResolution, experimentalTsImportSpecifiers, ...unrecognized } = jsonObject;
       const filteredTsConfigOptions = {
         compiler,
         compilerHost,
@@ -1530,13 +1482,14 @@ var require_resolver_functions = __commonJS({
             let typesNodePackageJsonPath;
             try {
               typesNodePackageJsonPath = projectLocalResolveHelper("@types/node/package.json", true);
-            } catch (e) {
+            } catch {
             }
             if (typesNodePackageJsonPath) {
               const typeRoots = [(0, path_1.resolve)(typesNodePackageJsonPath, "../..")];
-              ({ resolvedTypeReferenceDirective } = ts.resolveTypeReferenceDirective(typeDirectiveName, containingFile, __spreadProps(__spreadValues({}, config.options), {
+              ({ resolvedTypeReferenceDirective } = ts.resolveTypeReferenceDirective(typeDirectiveName, containingFile, {
+                ...config.options,
                 typeRoots
-              }), host, redirectedReference));
+              }, host, redirectedReference));
             }
           }
           if (resolvedTypeReferenceDirective) {
@@ -1838,15 +1791,18 @@ var require_node_options = __commonJS({
     var options;
     function parseOptions() {
       if (!options) {
-        options = __spreadValues(__spreadValues(__spreadValues({
+        options = {
           "--preserve-symlinks": false,
           "--preserve-symlinks-main": false,
           "--input-type": void 0,
           "--experimental-specifier-resolution": "explicit",
           "--experimental-policy": void 0,
           "--conditions": [],
-          "--pending-deprecation": false
-        }, parseArgv(getNodeOptionsEnvArgv())), parseArgv(process.execArgv)), getOptionValuesFromOtherEnvVars());
+          "--pending-deprecation": false,
+          ...parseArgv(getNodeOptionsEnvArgv()),
+          ...parseArgv(process.execArgv),
+          ...getOptionValuesFromOtherEnvVars()
+        };
       }
     }
     function parseArgv(argv) {
@@ -2257,7 +2213,7 @@ var require_node_internal_modules_cjs_loader = __commonJS({
         } else if (parent.id === "<repl>" || parent.id === "internal/preload") {
           try {
             return process.cwd() + path.sep;
-          } catch (e) {
+          } catch {
             return false;
           }
         }
@@ -10216,13 +10172,13 @@ var require_repl = __commonJS({
             context: context2
           });
           if (evalResult.containsTopLevelAwait) {
-            (() => __async(this, null, function* () {
+            (async () => {
               try {
-                callback(null, yield evalResult.valuePromise);
+                callback(null, await evalResult.valuePromise);
               } catch (promiseError) {
                 handleError(promiseError);
               }
-            }))();
+            })();
           } else {
             callback(null, evalResult.value);
           }
@@ -10253,7 +10209,7 @@ ${getTopLevelAwaitHint()}`;
                 _error.stack = (_b2 = _error.stack) === null || _b2 === void 0 ? void 0 : _b2.replace(/(SyntaxError:.*)/, (_, $1) => `${$1}
 
 ${getTopLevelAwaitHint()}`);
-              } catch (e) {
+              } catch {
               }
             }
             callback(_error);
@@ -10267,7 +10223,7 @@ ${getTopLevelAwaitHint()}`);
         startInternal({ code });
       }
       function startInternal(options2) {
-        const _a2 = options2 !== null && options2 !== void 0 ? options2 : {}, { code, forceToBeModule = true } = _a2, optionsOverride = __objRest(_a2, ["code", "forceToBeModule"]);
+        const { code, forceToBeModule = true, ...optionsOverride } = options2 !== null && options2 !== void 0 ? options2 : {};
         if (code) {
           try {
             evalCode(`${code}
@@ -10278,15 +10234,16 @@ ${getTopLevelAwaitHint()}`);
           }
         }
         service === null || service === void 0 ? void 0 : service.compile("", state.path);
-        const repl = (0, repl_1.start)(__spreadValues({
+        const repl = (0, repl_1.start)({
           prompt: "> ",
           input: replService.stdin,
           output: replService.stdout,
           // Mimicking node's REPL implementation: https://github.com/nodejs/node/blob/168b22ba073ee1cbf8d0bcb4ded7ff3099335d04/lib/internal/repl.js#L28-L30
           terminal: stdout.isTTY && !parseInt(index_1.env.NODE_NO_READLINE, 10),
           eval: nodeEval,
-          useGlobal: true
-        }, optionsOverride));
+          useGlobal: true,
+          ...optionsOverride
+        });
         nodeReplServer = repl;
         context = repl.context;
         const resetEval = appendToEvalState(state, "");
@@ -10397,9 +10354,10 @@ ${module_1.builtinModules.filter((name) => !name.startsWith("_") && !name.includ
           if (err instanceof index_1.TSError && err.diagnosticCodes[0] === 2339) {
             throw err;
           }
-          return appendCompileAndEvalInput(__spreadProps(__spreadValues({}, options), {
+          return appendCompileAndEvalInput({
+            ...options,
             wrappedErr: err
-          }));
+          });
         }
         if (wrappedErr)
           throw wrappedErr;
@@ -10443,14 +10401,14 @@ ${module_1.builtinModules.filter((name) => !name.startsWith("_") && !name.includ
       if (containsTopLevelAwait) {
         return {
           containsTopLevelAwait,
-          valuePromise: (() => __async(this, null, function* () {
+          valuePromise: (async () => {
             let value2;
             for (const command of commands) {
               const r = command.execCommand();
-              value2 = command.mustAwait ? yield r : r;
+              value2 = command.mustAwait ? await r : r;
             }
             return value2;
-          }))()
+          })()
         };
       } else {
         return {
@@ -11857,7 +11815,7 @@ var require_source_map_support = __commonJS({
       } else {
         try {
           return pathToFileURL(pathOrFileUrl).toString();
-        } catch (e) {
+        } catch {
           return pathOrFileUrl;
         }
       }
@@ -12539,7 +12497,7 @@ var require_node_internal_modules_esm_resolve = __commonJS({
               const { packageSubpath } = parsePackageName(afterNodeModulesPath);
               if (packageSubpath === ".")
                 return;
-            } catch (e) {
+            } catch {
             }
           }
         }
@@ -12579,7 +12537,7 @@ Update this package.json to use a subpath pattern like "${match}*".`,
       function tryStatSyncWithErrors(path) {
         try {
           return statSync(path);
-        } catch (e) {
+        } catch {
           return statsIfNotFound;
         }
       }
@@ -12821,7 +12779,7 @@ Update this package.json to use a subpath pattern like "${match}*".`,
             try {
               new URL2(target);
               isURL = true;
-            } catch (e) {
+            } catch {
             }
             if (!isURL) {
               const exportTarget = pattern ? StringPrototypeReplace(target, patternRegEx, subpath) : target + subpath;
@@ -13190,7 +13148,7 @@ Update this package.json to use a subpath pattern like "${match}*".`,
         } else {
           try {
             resolved = new URL2(specifier);
-          } catch (e) {
+          } catch {
             resolved = packageResolve(specifier, base, conditions);
           }
         }
@@ -13218,7 +13176,7 @@ Update this package.json to use a subpath pattern like "${match}*".`,
             found = StringPrototypeReplace(found, new RegExp(`\\${sep}`, "g"), "/");
           }
           return found;
-        } catch (e) {
+        } catch {
           return false;
         }
       }
@@ -13255,7 +13213,7 @@ Update this package.json to use a subpath pattern like "${match}*".`,
               url: specifier
             };
           }
-        } catch (e) {
+        } catch {
         }
         if (parsed && parsed.protocol === builtinModuleProtocol)
           return { url: specifier };
@@ -13452,164 +13410,150 @@ var require_esm = __commonJS({
       }
       const rememberIsProbablyEntrypoint = /* @__PURE__ */ new Set();
       const rememberResolvedViaCommonjsFallback = /* @__PURE__ */ new Set();
-      function resolve(specifier, context, defaultResolve) {
-        return __async(this, null, function* () {
-          const defer = () => __async(this, null, function* () {
-            const r = yield defaultResolve(specifier, context, defaultResolve);
-            return r;
-          });
-          function entrypointFallback(cb) {
-            return __async(this, null, function* () {
+      async function resolve(specifier, context, defaultResolve) {
+        const defer = async () => {
+          const r = await defaultResolve(specifier, context, defaultResolve);
+          return r;
+        };
+        async function entrypointFallback(cb) {
+          try {
+            const resolution = await cb();
+            if ((resolution === null || resolution === void 0 ? void 0 : resolution.url) && isProbablyEntrypoint(specifier, context.parentURL))
+              rememberIsProbablyEntrypoint.add(resolution.url);
+            return resolution;
+          } catch (esmResolverError) {
+            if (!isProbablyEntrypoint(specifier, context.parentURL))
+              throw esmResolverError;
+            try {
+              let cjsSpecifier = specifier;
               try {
-                const resolution = yield cb();
-                if ((resolution === null || resolution === void 0 ? void 0 : resolution.url) && isProbablyEntrypoint(specifier, context.parentURL))
-                  rememberIsProbablyEntrypoint.add(resolution.url);
-                return resolution;
-              } catch (esmResolverError) {
-                if (!isProbablyEntrypoint(specifier, context.parentURL))
-                  throw esmResolverError;
-                try {
-                  let cjsSpecifier = specifier;
-                  try {
-                    if (specifier.startsWith("file://"))
-                      cjsSpecifier = (0, url_1.fileURLToPath)(specifier);
-                  } catch (e) {
-                  }
-                  const resolution = (0, url_1.pathToFileURL)((0, module_1.createRequire)(process.cwd()).resolve(cjsSpecifier)).toString();
-                  rememberIsProbablyEntrypoint.add(resolution);
-                  rememberResolvedViaCommonjsFallback.add(resolution);
-                  return { url: resolution, format: "commonjs" };
-                } catch (commonjsResolverError) {
-                  throw esmResolverError;
-                }
+                if (specifier.startsWith("file://"))
+                  cjsSpecifier = (0, url_1.fileURLToPath)(specifier);
+              } catch {
               }
-            });
+              const resolution = (0, url_1.pathToFileURL)((0, module_1.createRequire)(process.cwd()).resolve(cjsSpecifier)).toString();
+              rememberIsProbablyEntrypoint.add(resolution);
+              rememberResolvedViaCommonjsFallback.add(resolution);
+              return { url: resolution, format: "commonjs" };
+            } catch (commonjsResolverError) {
+              throw esmResolverError;
+            }
           }
-          return addShortCircuitFlag(() => __async(this, null, function* () {
-            const parsed = (0, url_1.parse)(specifier);
-            const { pathname, protocol, hostname } = parsed;
-            if (!isFileUrlOrNodeStyleSpecifier(parsed)) {
-              return entrypointFallback(defer);
-            }
-            if (protocol !== null && protocol !== "file:") {
-              return entrypointFallback(defer);
-            }
-            if (hostname) {
-              return entrypointFallback(defer);
-            }
-            return entrypointFallback(() => nodeResolveImplementation.defaultResolve(specifier, context, defaultResolve));
-          }));
-        });
-      }
-      function load(url, context, defaultLoad) {
-        return __async(this, null, function* () {
-          return addShortCircuitFlag(() => __async(this, null, function* () {
-            var _a;
-            const format = (_a = context.format) !== null && _a !== void 0 ? _a : (yield getFormat(url, context, nodeGetFormatImplementation.defaultGetFormat)).format;
-            let source = void 0;
-            if (format !== "builtin" && format !== "commonjs") {
-              const { source: rawSource } = yield defaultLoad(url, __spreadProps(__spreadValues({}, context), {
-                format
-              }), defaultLoad);
-              if (rawSource === void 0 || rawSource === null) {
-                throw new Error(`Failed to load raw source: Format was '${format}' and url was '${url}''.`);
-              }
-              const defaultTransformSource = (source2, _context, _defaultTransformSource) => __async(this, null, function* () {
-                return { source: source2 };
-              });
-              const { source: transformedSource } = yield transformSource(rawSource, { url, format }, defaultTransformSource);
-              source = transformedSource;
-            }
-            return { format, source };
-          }));
-        });
-      }
-      function getFormat(url, context, defaultGetFormat) {
-        return __async(this, null, function* () {
-          const defer = (overrideUrl = url) => defaultGetFormat(overrideUrl, context, defaultGetFormat);
-          function entrypointFallback(cb) {
-            return __async(this, null, function* () {
-              try {
-                return yield cb();
-              } catch (getFormatError) {
-                if (!rememberIsProbablyEntrypoint.has(url))
-                  throw getFormatError;
-                return { format: "commonjs" };
-              }
-            });
-          }
-          const parsed = (0, url_1.parse)(url);
+        }
+        return addShortCircuitFlag(async () => {
+          const parsed = (0, url_1.parse)(specifier);
+          const { pathname, protocol, hostname } = parsed;
           if (!isFileUrlOrNodeStyleSpecifier(parsed)) {
             return entrypointFallback(defer);
           }
-          const { pathname } = parsed;
-          assert(pathname !== null, "ESM getFormat() hook: URL should never have null pathname");
-          const nativePath = (0, url_1.fileURLToPath)(url);
-          let nodeSays;
-          const ext = (0, path_1.extname)(nativePath);
-          const tsNodeIgnored = tsNodeService.ignored(nativePath);
-          const nodeEquivalentExt = extensions.nodeEquivalents.get(ext);
-          if (nodeEquivalentExt && !tsNodeIgnored) {
-            nodeSays = yield entrypointFallback(() => defer((0, url_1.format)((0, url_1.pathToFileURL)(nativePath + nodeEquivalentExt))));
-          } else {
-            try {
-              nodeSays = yield entrypointFallback(defer);
-            } catch (e) {
-              if (e instanceof Error && tsNodeIgnored && extensions.nodeDoesNotUnderstand.includes(ext)) {
-                e.message += `
+          if (protocol !== null && protocol !== "file:") {
+            return entrypointFallback(defer);
+          }
+          if (hostname) {
+            return entrypointFallback(defer);
+          }
+          return entrypointFallback(() => nodeResolveImplementation.defaultResolve(specifier, context, defaultResolve));
+        });
+      }
+      async function load(url, context, defaultLoad) {
+        return addShortCircuitFlag(async () => {
+          var _a;
+          const format = (_a = context.format) !== null && _a !== void 0 ? _a : (await getFormat(url, context, nodeGetFormatImplementation.defaultGetFormat)).format;
+          let source = void 0;
+          if (format !== "builtin" && format !== "commonjs") {
+            const { source: rawSource } = await defaultLoad(url, {
+              ...context,
+              format
+            }, defaultLoad);
+            if (rawSource === void 0 || rawSource === null) {
+              throw new Error(`Failed to load raw source: Format was '${format}' and url was '${url}''.`);
+            }
+            const defaultTransformSource = async (source2, _context, _defaultTransformSource) => ({ source: source2 });
+            const { source: transformedSource } = await transformSource(rawSource, { url, format }, defaultTransformSource);
+            source = transformedSource;
+          }
+          return { format, source };
+        });
+      }
+      async function getFormat(url, context, defaultGetFormat) {
+        const defer = (overrideUrl = url) => defaultGetFormat(overrideUrl, context, defaultGetFormat);
+        async function entrypointFallback(cb) {
+          try {
+            return await cb();
+          } catch (getFormatError) {
+            if (!rememberIsProbablyEntrypoint.has(url))
+              throw getFormatError;
+            return { format: "commonjs" };
+          }
+        }
+        const parsed = (0, url_1.parse)(url);
+        if (!isFileUrlOrNodeStyleSpecifier(parsed)) {
+          return entrypointFallback(defer);
+        }
+        const { pathname } = parsed;
+        assert(pathname !== null, "ESM getFormat() hook: URL should never have null pathname");
+        const nativePath = (0, url_1.fileURLToPath)(url);
+        let nodeSays;
+        const ext = (0, path_1.extname)(nativePath);
+        const tsNodeIgnored = tsNodeService.ignored(nativePath);
+        const nodeEquivalentExt = extensions.nodeEquivalents.get(ext);
+        if (nodeEquivalentExt && !tsNodeIgnored) {
+          nodeSays = await entrypointFallback(() => defer((0, url_1.format)((0, url_1.pathToFileURL)(nativePath + nodeEquivalentExt))));
+        } else {
+          try {
+            nodeSays = await entrypointFallback(defer);
+          } catch (e) {
+            if (e instanceof Error && tsNodeIgnored && extensions.nodeDoesNotUnderstand.includes(ext)) {
+              e.message += `
 
 Hint:
 ts-node is configured to ignore this file.
 If you want ts-node to handle this file, consider enabling the "skipIgnore" option or adjusting your "ignore" patterns.
 https://typestrong.org/ts-node/docs/scope
 `;
-              }
-              throw e;
             }
+            throw e;
           }
-          if (!tsNodeService.ignored(nativePath) && (nodeSays.format === "commonjs" || nodeSays.format === "module")) {
-            const { moduleType } = tsNodeService.moduleTypeClassifier.classifyModuleByModuleTypeOverrides((0, util_1.normalizeSlashes)(nativePath));
-            if (moduleType === "cjs") {
-              return { format: "commonjs" };
-            } else if (moduleType === "esm") {
-              return { format: "module" };
-            }
+        }
+        if (!tsNodeService.ignored(nativePath) && (nodeSays.format === "commonjs" || nodeSays.format === "module")) {
+          const { moduleType } = tsNodeService.moduleTypeClassifier.classifyModuleByModuleTypeOverrides((0, util_1.normalizeSlashes)(nativePath));
+          if (moduleType === "cjs") {
+            return { format: "commonjs" };
+          } else if (moduleType === "esm") {
+            return { format: "module" };
           }
-          return nodeSays;
-        });
+        }
+        return nodeSays;
       }
-      function transformSource(source, context, defaultTransformSource) {
-        return __async(this, null, function* () {
-          if (source === null || source === void 0) {
-            throw new Error("No source");
-          }
-          const defer = () => defaultTransformSource(source, context, defaultTransformSource);
-          const sourceAsString = typeof source === "string" ? source : source.toString("utf8");
-          const { url } = context;
-          const parsed = (0, url_1.parse)(url);
-          if (!isFileUrlOrNodeStyleSpecifier(parsed)) {
-            return defer();
-          }
-          const nativePath = (0, url_1.fileURLToPath)(url);
-          if (tsNodeService.ignored(nativePath)) {
-            return defer();
-          }
-          const emittedJs = tsNodeService.compile(sourceAsString, nativePath);
-          return { source: emittedJs };
-        });
+      async function transformSource(source, context, defaultTransformSource) {
+        if (source === null || source === void 0) {
+          throw new Error("No source");
+        }
+        const defer = () => defaultTransformSource(source, context, defaultTransformSource);
+        const sourceAsString = typeof source === "string" ? source : source.toString("utf8");
+        const { url } = context;
+        const parsed = (0, url_1.parse)(url);
+        if (!isFileUrlOrNodeStyleSpecifier(parsed)) {
+          return defer();
+        }
+        const nativePath = (0, url_1.fileURLToPath)(url);
+        if (tsNodeService.ignored(nativePath)) {
+          return defer();
+        }
+        const emittedJs = tsNodeService.compile(sourceAsString, nativePath);
+        return { source: emittedJs };
       }
       return hooksAPI;
     }
     exports2.createEsmHooks = createEsmHooks;
-    function addShortCircuitFlag(fn) {
-      return __async(this, null, function* () {
-        const ret = yield fn();
-        if (ret == null)
-          return ret;
-        return __spreadProps(__spreadValues({}, ret), {
-          shortCircuit: true
-        });
-      });
+    async function addShortCircuitFlag(fn) {
+      const ret = await fn();
+      if (ret == null)
+        return ret;
+      return {
+        ...ret,
+        shortCircuit: true
+      };
     }
   }
 });
@@ -13793,17 +13737,19 @@ ${diagnosticText}`);
         var _a3;
         if (transpiler) {
           let createTranspiler2 = function(compilerOptions, nodeModuleEmitKind) {
-            return transpilerFactory === null || transpilerFactory === void 0 ? void 0 : transpilerFactory(__spreadValues({
+            return transpilerFactory === null || transpilerFactory === void 0 ? void 0 : transpilerFactory({
               service: {
                 options,
-                config: __spreadProps(__spreadValues({}, config), {
+                config: {
+                  ...config,
                   options: compilerOptions
-                }),
+                },
                 projectLocalResolveHelper
               },
               transpilerConfigLocalResolveHelper,
-              nodeModuleEmitKind
-            }, transpilerOptions));
+              nodeModuleEmitKind,
+              ...transpilerOptions
+            });
           };
           if (!transpileOnly)
             throw new Error("Custom transpiler can only be used when transpileOnly is enabled.");
@@ -13998,7 +13944,9 @@ This is usually the result of a faulty configuration or import. Make sure there 
             return { name, comment };
           };
         } else {
-          const sys = __spreadProps(__spreadValues(__spreadValues({}, ts.sys), diagnosticHost), {
+          const sys = {
+            ...ts.sys,
+            ...diagnosticHost,
             readFile: (fileName) => {
               const cacheContents = fileContents.get(fileName);
               if (cacheContents !== void 0)
@@ -14014,8 +13962,9 @@ This is usually the result of a faulty configuration or import. Make sure there 
             directoryExists: (0, util_1.cachedLookup)(debugFn("directoryExists", ts.sys.directoryExists)),
             resolvePath: (0, util_1.cachedLookup)(debugFn("resolvePath", ts.sys.resolvePath)),
             realpath: ts.sys.realpath ? (0, util_1.cachedLookup)(debugFn("realpath", ts.sys.realpath)) : void 0
-          });
-          const host = ts.createIncrementalCompilerHost ? ts.createIncrementalCompilerHost(config.options, sys) : __spreadProps(__spreadValues({}, sys), {
+          };
+          const host = ts.createIncrementalCompilerHost ? ts.createIncrementalCompilerHost(config.options, sys) : {
+            ...sys,
             getSourceFile: (fileName, languageVersion) => {
               const contents = sys.readFile(fileName);
               if (contents === void 0)
@@ -14025,7 +13974,7 @@ This is usually the result of a faulty configuration or import. Make sure there 
             getDefaultLibLocation: () => (0, util_1.normalizeSlashes)((0, path_1.dirname)(compiler)),
             getDefaultLibFileName: () => (0, util_1.normalizeSlashes)((0, path_1.join)((0, path_1.dirname)(compiler), ts.getDefaultLibFileName(config.options))),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
-          });
+          };
           host.trace = options.tsTrace;
           const { resolveModuleNames, resolveTypeReferenceDirectives, isFileKnownToBeInternal, markBucketOfFilenameInternal } = (0, resolver_functions_1.createResolverFunctions)({
             host,
@@ -14129,7 +14078,7 @@ This is usually the result of a faulty configuration or import. Make sure there 
         };
       }
       function createTranspileOnlyGetOutputFunction(overrideModuleType, nodeModuleEmitKind) {
-        const compilerOptions = __spreadValues({}, config.options);
+        const compilerOptions = { ...config.options };
         if (overrideModuleType !== void 0)
           compilerOptions.module = overrideModuleType;
         let customTranspiler = createTranspiler === null || createTranspiler === void 0 ? void 0 : createTranspiler(compilerOptions, nodeModuleEmitKind);
@@ -14203,9 +14152,10 @@ This is usually the result of a faulty configuration or import. Make sure there 
         return true;
       };
       function addDiagnosticFilter(filter) {
-        diagnosticFilters.push(__spreadProps(__spreadValues({}, filter), {
+        diagnosticFilters.push({
+          ...filter,
           filenamesAbsolute: filter.filenamesAbsolute.map((f) => (0, util_1.normalizeSlashes)(f))
-        }));
+        });
       }
       const getNodeEsmResolver = (0, util_1.once)(() => require_node_internal_modules_esm_resolve().createResolve({
         extensions,
@@ -14362,25 +14312,25 @@ var require_register = __commonJS({
 // src/configs.ts
 var configs_exports = {};
 __export(configs_exports, {
-  DB_DATABASE: () => DB_DATABASE,
   DB_HOST: () => DB_HOST,
+  DB_NAME: () => DB_NAME,
   DB_PASSWORD: () => DB_PASSWORD,
-  DB_USERNAME: () => DB_USERNAME,
-  PORT: () => PORT
+  DB_PORT: () => DB_PORT,
+  DB_USERNAME: () => DB_USERNAME
 });
-var import_dotenv, PORT, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_DATABASE;
+var import_dotenv, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_NAME;
 var init_configs = __esm({
   "src/configs.ts"() {
     "use strict";
     import_dotenv = __toESM(require("dotenv"));
-    import_dotenv.default.config({ path: `.env` });
+    import_dotenv.default.config({ path: ".env" });
     ({
-      PORT,
+      DB_PORT,
       DB_USERNAME,
       DB_PASSWORD,
       DB_HOST,
-      DB_DATABASE
-    } = __spreadValues({}, process.env));
+      DB_NAME
+    } = { ...process.env });
   }
 });
 
@@ -14390,9 +14340,9 @@ var configs = (init_configs(), __toCommonJS(configs_exports));
 module.exports = {
   username: configs.DB_USERNAME,
   password: configs.DB_PASSWORD,
-  database: configs.DB_DATABASE,
+  database: configs.DB_NAME,
   host: configs.DB_HOST,
   dialect: "mysql",
-  port: 3306
+  port: configs.DB_PORT
 };
 //# sourceMappingURL=sequelize.config.js.map
