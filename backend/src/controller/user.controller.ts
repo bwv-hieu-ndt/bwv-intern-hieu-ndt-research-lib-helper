@@ -33,12 +33,13 @@ class UserController {
     }
   }
 
-  public async getUserById(id: number) {
+  public async getUserById(req: Request, res: Response) {
+    const { id } = req.params;
     try {
       const user = await this.userService.getUserById(id);
-      return user;
+      res.status(201).json(user);
     } catch (error: any) {
-      throw new Error(`Error: ${error.message}`);
+      res.status(500).json({ error: `Error: ${error.message}` });
     }
   }
 

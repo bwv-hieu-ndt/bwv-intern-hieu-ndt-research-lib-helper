@@ -5,21 +5,22 @@ import { IUser } from '@/interface';
 import { validate } from 'class-validator';
 
 class UserService {
-  public async createUser(dto: UserInputDto): Promise<void> {
-    const transaction = await sequelizeConnection.transaction();
-
+  public async createUser(dto: UserInputDto): Promise<IUser> {
     const errors = await validate(dto);
     if (errors.length > 0) {
       throw new Error(`Validation failed: ${errors}`);
     }
 
+    const transaction = await sequelizeConnection.transaction();
+
     try {
-      await UserModel.create(dto, { transaction: transaction });
+      const newUser = await UserModel.create(dto, { transaction });
       await transaction.commit();
+
+      return newUser.toJSON() as IUser;
     } catch (error) {
       await transaction.rollback();
-
-      throw new Error(`User creation failed: ${error.message}`);
+      throw error;
     }
   }
 
@@ -28,9 +29,9 @@ class UserService {
     return users;
   }
 
-  public async getUserById(id: number): Promise<UserModel | null> {
+  public async getUserById(id: string): Promise<IUser> {
     const user = await UserModel.findOne({ where: { id: id } });
-    return user;
+    return user.toJSON() as IUser;
   }
 
   public async deleteUser(id: number): Promise<Boolean> {
