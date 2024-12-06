@@ -5,6 +5,8 @@ import { IUser } from '@/interface';
 import { validate } from 'class-validator';
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import Big from 'big.js';
+import { da } from '@faker-js/faker/.';
 
 class UserService {
   public async createUser(dto: UserInputDto): Promise<IUser> {
@@ -66,6 +68,13 @@ class UserService {
     const isValid = dayjs().diff(dayjs(user.birthday), 'year');
 
     return isValid;
+  };
+
+  // Big js
+  public useBigInt = async () => {
+    // const users = await UserModel.findAll();
+    const data = 1283725894638578439768947986798743067034969079603809843908690 * 0.1;
+    return { data: BigInt(data) };
   };
 }
 

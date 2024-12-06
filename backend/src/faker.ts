@@ -8,7 +8,7 @@ const random = () => {
 
 async function generateUsers() {
   const users: IUser[] = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 3; i++) {
     users.push({
       id: faker.string.uuid(),
       firstName: faker.person.firstName(),
@@ -20,6 +20,7 @@ async function generateUsers() {
       password: faker.internet.password(),
       createdAt: new Date(),
       updatedAt: new Date(),
+      spendingMoney: faker.number.bigInt(),
     });
   }
 

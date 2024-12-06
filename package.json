@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@types/big.js": "^6.2.2"
+  }
+}

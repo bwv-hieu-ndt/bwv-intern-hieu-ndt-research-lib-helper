@@ -16,6 +16,7 @@ class UserController {
     // Research
     this.getUserSort = this.getUserSort.bind(this);
     this.isValidUser = this.isValidUser.bind(this);
+    this.useBigInt = this.useBigInt.bind(this);
   }
 
   public async createUser(req: Request, res: Response): Promise<void> {
@@ -73,7 +74,16 @@ class UserController {
     }
   };
 
-  //Big js
+  // Big js
+  public useBigInt = async (req: Request, res: Response) => {
+    const {} = req.params;
+    try {
+      const data = await this.userService.useBigInt();
+      res.status(201).json(data);
+    } catch (error) {
+      res.status(500).json({ error: `Error: ${error.message}` });
+    }
+  };
 }
 
 export default UserController;

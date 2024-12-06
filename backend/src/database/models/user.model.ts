@@ -15,6 +15,7 @@ class UserModel extends Model<IUser> implements IUser {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
+  spendingMoney: BigInt;
 }
 
 UserModel.init(
@@ -55,6 +56,10 @@ UserModel.init(
     },
     updatedAt: {
       type: DataTypes.DATE,
+    },
+    spendingMoney: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
     },
   },
   {

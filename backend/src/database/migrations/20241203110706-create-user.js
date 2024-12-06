@@ -23,7 +23,7 @@ module.exports = {
       },
       gender: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       },
       birthday: {
         type: Sequelize.DATEONLY,
