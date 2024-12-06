@@ -12,6 +12,9 @@ class UserController {
     this.getAllUser = this.getAllUser.bind(this);
     this.getUserById = this.getUserById.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
+
+    // Research
+    this.getUserSort = this.getUserSort.bind(this);
   }
 
   public async createUser(req: Request, res: Response): Promise<void> {
@@ -25,8 +28,11 @@ class UserController {
   }
 
   public async getAllUser(req: Request, res: Response): Promise<void> {
+    const page = Number(req.query.page);
+    const pageSize = Number(req.query.pageSize);
+
     try {
-      const users = await this.userService.getAllUser();
+      const users = await this.userService.getAllUser(page, pageSize);
       res.status(201).json(users);
     } catch (error: any) {
       res.status(500).json({ error: `Error: ${error.message}` });
@@ -43,12 +49,15 @@ class UserController {
     }
   }
 
-  public async deleteUser(id: number) {
+  public async deleteUser(id: number) {}
+
+  // Lodash
+  public async getUserSort(req: Request, res: Response) {
     try {
-      const result = await this.userService.deleteUser(id);
-      return result;
+      const data = await this.userService.getUserSortByBirthDay();
+      res.status(201).json(data);
     } catch (error: any) {
-      throw new Error(`Error: ${error.message}`);
+      res.status(500).json({ error: `Error: ${error.message}` });
     }
   }
 }

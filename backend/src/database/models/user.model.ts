@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import connection from '../connection';
 import { IUser } from '@/interface';
+import { Gender } from '@/enum';
 
 class UserModel extends Model<IUser> {}
 
@@ -25,7 +26,7 @@ UserModel.init(
     },
     gender: {
       allowNull: false,
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
     birthday: {
       type: DataTypes.DATEONLY,
