@@ -4,6 +4,7 @@ import { UserInputDto } from '@/dto/user_input.dto';
 import { IUser } from '@/interface';
 import { validate } from 'class-validator';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 class UserService {
   public async createUser(dto: UserInputDto): Promise<IUser> {
@@ -56,6 +57,15 @@ class UserService {
     const sortedUsers = _.sortBy(users, 'gender');
 
     return sortedUsers;
+  };
+
+  // Day js
+  public isValidUser = async (id: string) => {
+    const user = await UserModel.findByPk(id);
+
+    const isValid = dayjs().diff(dayjs(user.birthday), 'year');
+
+    return isValid;
   };
 }
 

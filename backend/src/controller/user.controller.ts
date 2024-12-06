@@ -15,6 +15,7 @@ class UserController {
 
     // Research
     this.getUserSort = this.getUserSort.bind(this);
+    this.isValidUser = this.isValidUser.bind(this);
   }
 
   public async createUser(req: Request, res: Response): Promise<void> {
@@ -60,6 +61,19 @@ class UserController {
       res.status(500).json({ error: `Error: ${error.message}` });
     }
   }
+
+  // Day js
+  public isValidUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const valid = await this.userService.isValidUser(id);
+      res.status(201).json(valid);
+    } catch (error) {
+      res.status(500).json({ error: `Error: ${error.message}` });
+    }
+  };
+
+  //Big js
 }
 
 export default UserController;

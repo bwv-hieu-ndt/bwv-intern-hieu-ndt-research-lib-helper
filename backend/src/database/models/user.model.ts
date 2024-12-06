@@ -3,7 +3,19 @@ import connection from '../connection';
 import { IUser } from '@/interface';
 import { Gender } from '@/enum';
 
-class UserModel extends Model<IUser> {}
+class UserModel extends Model<IUser> implements IUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  birthday?: Date;
+  gender: string;
+  username?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+}
 
 UserModel.init(
   {
